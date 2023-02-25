@@ -29,23 +29,6 @@ struct ContentView: View {
                 HStack {
                     inputTextView(inputText: $leftText, isMinus: $isLeftNegativeNumber)
                     inputTextView(inputText: $rightText, isMinus: $isRightNegativeNumber)
-//                    TextField("", text: $leftText)
-//                        .frame(width: 100)
-//                        .padding()
-//                    TextField("", text: $rightText)
-//                        .frame(width: 100)
-//                        .padding()
-//                }
-//                HStack {
-//                    Text("+")
-//                    Toggle("", isOn: $isLeftNegativeNumber)
-//                        .labelsHidden()
-//                    Text("-")
-//                    Spacer()
-//                    Text("+")
-//                    Toggle("", isOn: $isRightNegativeNumber)
-//                        .labelsHidden()
-//                    Text("-")
                 }
                 .tracking(10)
                 Button {
