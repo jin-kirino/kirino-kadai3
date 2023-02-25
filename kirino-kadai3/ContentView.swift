@@ -17,9 +17,9 @@ struct ContentView: View {
     // 右のtoggleを管理する
     @State private var isRightNegativeNumber: Bool = false
     // 左の数字を格納する
-    @State private var leftNumber: String = "0"
+    @State private var leftNumber: Int = 0
     // 右の数字を格納する
-    @State private var rightNumber: String = "0"
+    @State private var rightNumber: Int = 0
     // 計算結果を格納
     @State private var result: String = "0"
     
@@ -47,15 +47,23 @@ struct ContentView: View {
                 }
                 .tracking(10)
                 Button {
+                    // #2 ボタンタップ時のアクション
+                    let chengedText = didTapAction(firstText: leftText, secondText: rightText)
+                    // Int型に変換済み
+                    leftNumber = chengedText.firstNumber
+                    rightNumber = chengedText.secondNumber
+                    // もし左のtogleがtrueだったらマイナスに変換
+                    leftNumber = isLeftNegativeNumber ? -leftNumber : leftNumber
+                    rightNumber = isRightNegativeNumber ? -rightNumber : rightNumber
+                    result = String(leftNumber + rightNumber)
                     print("タップされた")
                 } label: {
                     Text("Button")
                 }
                 HStack {
-                    Spacer()
-                    Text(leftNumber)
+                    Text("\(leftNumber)")
                     Text("+")
-                    Text(rightNumber)
+                    Text("\(rightNumber)")
                 }
                 .tracking(40)
                 .padding()
@@ -67,6 +75,19 @@ struct ContentView: View {
             Spacer()
         }
         .padding()
+    }
+    private func didTapAction(firstText: String, secondText: String) -> (firstNumber: Int, secondNumber: Int) {
+        let firstNumber: Int = 0
+        let secondNumber: Int = 0
+        // 数字以外は返す
+        guard let firstNumber = Int(firstText) else {
+            return (firstNumber, secondNumber)
+        }
+        guard let secondNumber = Int(secondText) else {
+            return (firstNumber, secondNumber)
+        }
+        // 2つとも数字の時のみ、Int型に変換
+        return (firstNumber, secondNumber)
     }
 }
 
