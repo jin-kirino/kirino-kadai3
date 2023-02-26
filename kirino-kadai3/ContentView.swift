@@ -16,12 +16,8 @@ struct ContentView: View {
     @State private var isLeftNegativeNumber: Bool = false
     // 右のtoggleを管理する
     @State private var isRightNegativeNumber: Bool = false
-    // 左の数字を格納する
-    @State private var leftNumber: Int = 0
-    // 右の数字を格納する
-    @State private var rightNumber: Int = 0
-    // 計算結果を格納
-    @State private var result: Int = 0
+    // タプルの計算結果
+    @State private var calculation = (leftNumber: 0, rightNumber: 0, total: 0)
     
     var body: some View {
         HStack {
@@ -32,30 +28,25 @@ struct ContentView: View {
                 }
                 .tracking(10)
                 Button {
-                    // #2 ボタンタップ時のアクション
-                    let chengedText = didTapAction(firstText: leftText, secondText: rightText)
-                    // Int型に変換済み
-                    leftNumber = chengedText.firstNumber ?? 0
-                    rightNumber = chengedText.secondNumber ?? 0
-                    // もし左のtogleがtrueだったらマイナスに変換
-                    leftNumber = isLeftNegativeNumber ? -leftNumber : leftNumber
-                    rightNumber = isRightNegativeNumber ? -rightNumber : rightNumber
-                    result = leftNumber + rightNumber
+                    // 数字だったら計算
+                    if let leftNumber = Int(leftText), let rightNumber = Int(rightText) {
+                        calculation = didTapAction(firstNumber: leftNumber, secondNumber: rightNumber, firstToggl: isLeftNegativeNumber, secondToggle: isRightNegativeNumber)
+                    }
                     print("タップされた")
                 } label: {
                     Text("Button")
                 }
                 HStack {
                     Spacer()
-                    Text("\(leftNumber)")
+                    Text("\(calculation.leftNumber)")
                     Spacer()
                     Text("+")
                     Spacer()
-                    Text("\(rightNumber)")
+                    Text("\(calculation.rightNumber)")
                     Spacer()
                 }
                 .padding()
-                Text("\(result)")
+                Text("\(calculation.total)")
                 Spacer()
             }
             .frame(width: 250)
@@ -65,13 +56,17 @@ struct ContentView: View {
         .padding()
     }
     
-    private func didTapAction(firstText: String, secondText: String) -> (firstNumber: Int?, secondNumber: Int?) {
-        // 数字以外は返す
-        guard let firstNumber = Int(firstText), let secondNumber = Int(secondText) else {
-            return (nil, nil)
-        }
-        // 2つとも数字の時のみ、Int型に変換
-        return (firstNumber, secondNumber)
+    func didTapAction(firstNumber: Int, secondNumber: Int, firstToggl: Bool, secondToggle: Bool) -> (leftNumber: Int, rightNumber: Int, total: Int) {
+        var leftNumber: Int
+        var rightNumber: Int
+        var calculationResults: Int
+        
+        // Togglがtrueかfalseか→数字の+or-決定
+        leftNumber = firstToggl ? -firstNumber : firstNumber
+        rightNumber = secondToggle ? -secondNumber : secondNumber
+        // 足し算
+        calculationResults = leftNumber + rightNumber
+        return (leftNumber, rightNumber, calculationResults)
     }
 }
 
