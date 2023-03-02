@@ -16,8 +16,12 @@ struct ContentView: View {
     @State private var isLeftNegativeNumber: Bool = false
     // 右のtoggleを管理する
     @State private var isRightNegativeNumber: Bool = false
+    // 左の計算値を格納する
+    @State private var leftNumber: Int = 0
+    // 右の計算値を格納する
+    @State private var rightNumber: Int = 0
     // タプルの計算結果
-    @State private var calculation = (leftNumber: 0, rightNumber: 0, total: 0)
+    @State private var total: Int = 0
     
     var body: some View {
         HStack {
@@ -30,7 +34,9 @@ struct ContentView: View {
                 Button {
                     // 数字だったら計算
                     if let leftNumber = Int(leftText), let rightNumber = Int(rightText) {
-                        calculation = didTapAction(firstNumber: leftNumber, secondNumber: rightNumber, firstToggl: isLeftNegativeNumber, secondToggle: isRightNegativeNumber)
+                        // メソッドを実行
+                        didTapAction(firstNumber: leftNumber, secondNumber: rightNumber)
+                        print("###left:\(leftNumber)~right:\(rightNumber)")
                     }
                     print("タップされた")
                 } label: {
@@ -38,15 +44,15 @@ struct ContentView: View {
                 }
                 HStack {
                     Spacer()
-                    Text("\(calculation.leftNumber)")
+                    Text("\(leftNumber)")
                     Spacer()
                     Text("+")
                     Spacer()
-                    Text("\(calculation.rightNumber)")
+                    Text("\(rightNumber)")
                     Spacer()
                 }
                 .padding()
-                Text("\(calculation.total)")
+                Text("\(total)")
                 Spacer()
             }
             .frame(width: 250)
@@ -56,17 +62,12 @@ struct ContentView: View {
         .padding()
     }
     
-    func didTapAction(firstNumber: Int, secondNumber: Int, firstToggl: Bool, secondToggle: Bool) -> (leftNumber: Int, rightNumber: Int, total: Int) {
-        var leftNumber: Int
-        var rightNumber: Int
-        var calculationResults: Int
-        
+    func didTapAction(firstNumber: Int, secondNumber: Int) {
         // Togglがtrueかfalseか→数字の+or-決定
-        leftNumber = firstToggl ? -firstNumber : firstNumber
-        rightNumber = secondToggle ? -secondNumber : secondNumber
+        leftNumber = isLeftNegativeNumber ? -firstNumber : firstNumber
+        rightNumber = isRightNegativeNumber ? -secondNumber : secondNumber
         // 足し算
-        calculationResults = leftNumber + rightNumber
-        return (leftNumber, rightNumber, calculationResults)
+        total = leftNumber + rightNumber
     }
 }
 
