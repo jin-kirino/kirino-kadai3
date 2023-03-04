@@ -62,6 +62,7 @@ struct ContentView: View {
         .padding()
     }
     
+    // 引数は入力された２つの数字のみ、そのほかはプロパティに直接与えてる
     func didTapAction(firstNumber: Int, secondNumber: Int) {
         // Togglがtrueかfalseか→数字の+or-決定
         leftNumber = isLeftNegativeNumber ? -firstNumber : firstNumber
